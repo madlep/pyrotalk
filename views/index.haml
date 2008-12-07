@@ -1,0 +1,18 @@
+!!! Strict
+%html{html_attrs}
+
+  %head
+    %meta{'http-equiv' => 'Content-Type', :content => 'text/html'}/
+    %title Pyro Translator
+
+  %body
+    %h1 Pyro Translator
+
+    %form{:method => 'post'}
+      %textarea{:name => 'text', :cols => 80, :rows => 20}= @original_text
+      %br/
+      %input{:type => 'submit'}
+
+      %br
+      %p
+        = html_escape(@text).gsub("\n", "<br/><br/>")
