@@ -18,21 +18,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+$:.unshift File.join(File.dirname(__FILE__),'..', '..','web')
 
-
-# Basic sinatra web app for running the pyro talk translator
-require 'rubygems'
 require 'sinatra'
-require 'lib/pyrotalk'
+require 'sinatra/test/unit'
+require 'pyrotalk_web'
 
-get '/' do
-  @original_text = ''
-  @text = ''
-  haml :index
-end
+class PyrotalkWebTest < Test::Unit::TestCase
 
-post '/' do
-  @original_text = params[:text]
-  @text = PyroTalk.translate(@original_text)
-  haml :index
+  def setup
+    Sinatra.application.options.views = File.join(File.dirname(__FILE__),'..', '..','web', 'views')
+  end
+
+  def test_get
+    get_it '/'
+  end
+  
+  def test_post
+    post_it '/', :text => 'This is some english text'
+    assert_match 'Thiz iz thrmh englizh thxt', @response.body
+  end
+
 end
